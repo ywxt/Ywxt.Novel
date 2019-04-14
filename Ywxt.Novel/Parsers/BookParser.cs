@@ -12,12 +12,13 @@ using AngleSharp.Html.Parser;
 using Ywxt.Novel.Command;
 using Ywxt.Novel.Exceptions;
 using Ywxt.Novel.Models;
+using Ywxt.Novel.Utils;
 
 namespace Ywxt.Novel.Parsers
 {
     public class BookParser
     {
-        private HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public Template Template { get; set; }
 
@@ -42,9 +43,12 @@ namespace Ywxt.Novel.Parsers
             {
                 throw new UnmatchedArgumentException(nameof(Options.Book));
             }
-
             _httpClient.DefaultRequestHeaders.UserAgent.Clear();
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(Template.UserAgent);
+            if (!string.IsNullOrWhiteSpace(Template.UserAgent))
+            {
+                _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(Template.UserAgent);
+            }
+
             var html = await _httpClient.GetAsync(Options.Book);
             var document =
                 await new HtmlParser().ParseDocumentAsync(await html.Content.ReadAsStreamAsync());
@@ -53,7 +57,7 @@ namespace Ywxt.Novel.Parsers
 
         private Book HtmlParse(IHtmlDocument document)
         {
-            Book.Url = document.BaseUrl;
+            Book.Url = new Uri(Options.Book);
 
 
             if (string.IsNullOrWhiteSpace(Template.NameMatcher))
@@ -125,7 +129,10 @@ namespace Ywxt.Novel.Parsers
             }
 
             _httpClient.DefaultRequestHeaders.UserAgent.Clear();
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(Template.UserAgent);
+            if (!string.IsNullOrWhiteSpace(Template.UserAgent))
+            {
+                _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(Template.UserAgent);
+            }
             var chapter = await _httpClient.GetAsync(info.Url);
             var html =
                 await new HtmlParser().ParseDocumentAsync(
@@ -140,7 +147,7 @@ namespace Ywxt.Novel.Parsers
             {
                 var content = html.QuerySelector(Template.ChapterContentMatcher);
                 ch.Content = string.IsNullOrWhiteSpace(Template.ChapterContentAttribute)
-                    ? content.TextContent
+                    ? content.ChildNodes.Content()
                     : content.GetAttribute(Template.ChapterContentAttribute);
             }
 
@@ -148,8 +155,7 @@ namespace Ywxt.Novel.Parsers
             return ch;
         }
 
-       
-
+        
         ~BookParser()
         {
             _httpClient.Dispose();

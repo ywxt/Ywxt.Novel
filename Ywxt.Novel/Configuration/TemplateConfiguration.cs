@@ -13,18 +13,20 @@ namespace Ywxt.Novel.Configuration
     public class TemplateConfiguration
     {
         private static TemplateConfiguration _templateConfiguration;
+
         public static TemplateConfiguration GetTemplateConfiguration()
         {
-            if (_templateConfiguration==null)
+            if (_templateConfiguration == null)
             {
                 _templateConfiguration = new TemplateConfiguration();
             }
 
             return _templateConfiguration;
         }
-        
+
         private HttpClient _httpClient = new HttpClient();
         public const string TemplatePath = "config/template";
+        public const string BookPath = "books";
 
         public IEnumerable<Template> Templates { get; set; }
 
@@ -34,6 +36,13 @@ namespace Ywxt.Novel.Configuration
             {
                 Directory.CreateDirectory(TemplatePath);
             }
+
+            if (!Directory.Exists(BookPath))
+            {
+                Directory.CreateDirectory(BookPath);
+            }
+
+            GetTemplates();
         }
 
         private IEnumerable<Template> _GetTemplates()
@@ -46,9 +55,10 @@ namespace Ywxt.Novel.Configuration
                 {
                     template = JsonConvert.DeserializeObject<Template>(File.ReadAllText(file));
                 }
-                catch (Exception e)
+                catch (JsonReaderException e)
                 {
-                    template = null;
+                    throw new ParseException(
+                        $"解析模板发生错误，模板：{file},属性：{e.Path}，位置：{e.LineNumber},{e.LinePosition}");
                 }
 
                 yield return template;
@@ -61,9 +71,9 @@ namespace Ywxt.Novel.Configuration
             return Templates;
         }
 
-        public async Task InstallTemplate(Template template, string path, bool isOverride = false)
+        public async Task InstallTemplate(Template template, bool isOverride = false)
         {
-            var templatePath = Path.Combine(path, $"{template.Id}.template");
+            var templatePath = Path.Combine(TemplatePath, $"{template.Id}.template");
             if (File.Exists(templatePath))
             {
                 if (isOverride)

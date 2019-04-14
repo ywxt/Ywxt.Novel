@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Ywxt.Novel.Models;
 using Ywxt.Novel.Parsers;
@@ -28,18 +29,27 @@ namespace Ywxt.Novel.Downloaders
                 }
 
                 OnDownloadBookBegin?.Invoke(Parser.Book);
-                var file = File.Open(Path.Combine(Parser.Options.Path, $"{Parser.Book.Name}.txt"),
-                    FileMode.Create);
+                string path;
+                if (Directory.Exists(Parser.Options.Path))
+                {
+                    path = Path.Combine(Parser.Options.Path, $"{Parser.Book.Name}.txt");
+                }
+                else
+                {
+                    path = Parser.Options.Path;
+                }
+
+                var file = File.Open(path,FileMode.Create);
                 var writer = new StreamWriter(file);
                 await writer.WriteLineAsync($"书名：{Parser.Book.Name}");
                 await writer.WriteLineAsync($"作者：{Parser.Book.Author}");
                 foreach (var info in Parser.Book.Chapters)
                 {
-                    OnDownloadChapterBegin?.Invoke(count,info);
+                    OnDownloadChapterBegin?.Invoke(count, info);
                     var chapter = await Parser.ParseChapter(info);
                     await writer.WriteLineAsync(chapter.Title);
                     await writer.WriteLineAsync(chapter.Content);
-                    OnDownloadChapterComplete?.Invoke(count,chapter);
+                    OnDownloadChapterComplete?.Invoke(count, chapter);
                     count++;
                 }
 

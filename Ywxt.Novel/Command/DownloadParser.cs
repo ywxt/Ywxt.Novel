@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ywxt.Novel.Configuration;
 using Ywxt.Novel.Downloaders;
+using Ywxt.Novel.Exceptions;
 using Ywxt.Novel.Models;
 using Ywxt.Novel.Parsers;
 
@@ -46,6 +47,10 @@ namespace Ywxt.Novel.Command
             {
                 Console.WriteLine("模板参数有误，请检查后重试。错误信息：{0}", e.Message);
             }
+            catch (ParseException e)
+            {
+                Console.WriteLine("模板参数有误，请检查后重试。错误信息：{0}", e.Message);
+            }
 
             return await _parser.Parse();
         }
@@ -57,7 +62,7 @@ namespace Ywxt.Novel.Command
             {
                 _options = value;
                 _downloader.Parser.Options = _options;
-                _downloader.Parser.Template = _templateConfiguration.GetTemplates()
+                _downloader.Parser.Template = _templateConfiguration.Templates
                     .Single(t => t.Id == _options.Temeplate);
             }
         }

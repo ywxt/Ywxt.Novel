@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http.Headers;
+using CommandLine;
 using Newtonsoft.Json;
 
 namespace Ywxt.Novel.Models
@@ -15,7 +16,7 @@ namespace Ywxt.Novel.Models
         /// <summary>
         /// 网站
         /// </summary>
-        public Uri Website { get; set; }
+        public string Website { get; set; }
         /// <summary>
         /// Url匹配表达式
         /// </summary>
@@ -62,5 +63,10 @@ namespace Ywxt.Novel.Models
         public string AuthorAttribute { get; set; }
         
         public string UserAgent { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}\t\t\t{Website}";
+        }
     }
 }

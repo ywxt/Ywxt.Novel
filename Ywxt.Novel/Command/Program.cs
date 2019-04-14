@@ -1,21 +1,24 @@
-﻿using CommandLine;
+﻿using System.Threading.Tasks;
+using CommandLine;
 
 namespace Ywxt.Novel.Command
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            
-            Parser.Default.ParseArguments<DownloadCommand, SearchCommand>(args)
-                .MapResult
-                (
-                    (DownloadCommand downloadCommand) => 0,
-                    (SearchCommand searchCommand) => 0,
-                    erro => 1
-                );
+            var result = Parser.Default
+                .ParseArguments<DownloadCommand, InstallCommand, ListCommand, NewCommand>(args);
+            await result.MapResult
+            (
+                async (DownloadCommand downloadCommand) =>
+                    await DownloadParser.Parse(downloadCommand),
+                async (InstallCommand installCommand) =>
+                    await InstallParser.Parse(installCommand),
+                async (ListCommand listCommand) => await Task.Run(() => ListParser.Parse()),
+                async (NewCommand newCommand) => await NewParser.Parser(),
+                async error => await Task.FromResult(1)
+            );
         }
-
-      
     }
 }
