@@ -5,7 +5,7 @@ Ywxt.Novel download url -t|--template template [-o|--output output]
 ``` 
 - url:地址
 - template:模板ID
-- output:下载地址，默认为当前目录下的books文件
+- output:下载地址，默认为当前目录
 ## 安装模板
 ```bash
 Ywxt.Novel install url [-l|--local] [-o|--orverride]
