@@ -47,7 +47,7 @@ namespace Ywxt.Novel.Configuration
 
         private IEnumerable<Template> _GetTemplates()
         {
-            var files = Directory.GetFiles(TemplatePath, "*.template");
+            var files = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory,TemplatePath), "*.template");
             foreach (var file in files)
             {
                 Template template;
@@ -73,7 +73,7 @@ namespace Ywxt.Novel.Configuration
 
         public async Task InstallTemplate(Template template, bool isOverride = false)
         {
-            var templatePath = Path.Combine(TemplatePath, $"{template.Id}.template");
+            var templatePath = Path.Combine(AppContext.BaseDirectory,TemplatePath, $"{template.Id}.template");
             if (File.Exists(templatePath))
             {
                 if (isOverride)
