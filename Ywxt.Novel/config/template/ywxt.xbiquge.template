@@ -1,0 +1,16 @@
+{
+    "Id": "ywxt.xbiquge",
+    "Website": "xbiquge.cc",
+    "BookUrlMatcher": "(https\\://|http\\://){0,1}www\\.xbiquge\\.cc/book/\\d+?/{0,1}",
+    "NameMatcher": "#info > h1",
+    "NameHtmlAttribute": "",
+    "ChapterNamelMatcher": "#list > dl > dd > a",
+    "ChapterNameAttribute": "",
+    "ChapterUrlMatcher": "#list > dl > dd > a",
+    "ChapterUrlAttribute": "href",
+    "ChapterContentMatcher": "#content",
+    "ChapterContentAttribute": "",
+    "AuthorMatcher": "#info > p:nth-child(2) > a",
+    "AuthorAttribute": "",
+    "UserAgent": ""
+}
