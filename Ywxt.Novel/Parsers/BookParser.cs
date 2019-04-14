@@ -18,7 +18,8 @@ namespace Ywxt.Novel.Parsers
 {
     public class BookParser
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient =
+            new HttpClient(new HttpClientHandler {UseProxy = false});
 
         public Template Template { get; set; }
 

@@ -9,7 +9,7 @@ namespace Ywxt.Novel.Command
         [Option('t', "template", Required = true, HelpText = "模板")]
         public string Temeplate { get; set; }
 
-        [Option('o', "output",Required = true, HelpText = "保存路径", Default = TemplateConfiguration.BookPath)]
+        [Option('o', "output", HelpText = "保存路径", Default = TemplateConfiguration.BookPath)]
         public string Path { get; set; }
 
         [Value(0, HelpText = "书", MetaName = "book", Required = true)]
