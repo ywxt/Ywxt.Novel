@@ -32,16 +32,7 @@ namespace Ywxt.Novel.Configuration
 
         private TemplateConfiguration()
         {
-            if (!Directory.Exists(TemplatePath))
-            {
-                Directory.CreateDirectory(TemplatePath);
-            }
-
-            if (!Directory.Exists(BookPath))
-            {
-                Directory.CreateDirectory(BookPath);
-            }
-
+            
             GetTemplates();
         }
 
