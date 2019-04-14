@@ -1,6 +1,6 @@
 {
     "Id": "ywxt.biquge",
-    "Website": "biquge.com",
+    "Website": "qu.la",
     "BookUrlMatcher": "(https\\://|http\\://){0,1}www\\.qu\\.la/book/\\d+/{0,1}",
     "NameMatcher": "#info > h1",
     "NameHtmlAttribute": "",
