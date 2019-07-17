@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Ywxt.Novel": {
+      "commandName": "Project",
+      "commandLineArgs": "download https://www.qu.la/book/2125/ -t ywxt.biquge"
+    }
+  }
+}
